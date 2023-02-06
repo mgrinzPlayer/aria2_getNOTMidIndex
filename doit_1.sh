@@ -25,10 +25,10 @@ cd ..
 
 tar -xf libraries_and_aria/c-ares-1.19.0.tar.gz
 cd c-ares-1.19.0
-export curl_cv_func_getnameinfo_args='const struct sockaddr *,socklen_t,DWORD,int'
-export curl_cv_func_recv_args='SOCKET,char *,int,int,int'
-export curl_cv_func_recvfrom_args='SOCKET,char *,int,int,struct sockaddr *,int *,int'
-export curl_cv_func_send_args='SOCKET,const char *,int,int,int'
+# export curl_cv_func_getnameinfo_args='const struct sockaddr *,socklen_t,DWORD,int'
+# export curl_cv_func_recv_args='SOCKET,char *,int,int,int'
+# export curl_cv_func_recvfrom_args='SOCKET,char *,int,int,struct sockaddr *,int *,int'
+# export curl_cv_func_send_args='SOCKET,const char *,int,int,int'
 ./configure --enable-shared=no --enable-static=yes --host=$HOST --prefix=$PREFIX --without-random --disable-tests
 make -j4
 make install
