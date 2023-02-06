@@ -1,0 +1,43 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: install mingw-w64-x86-64 libc6-dev patch xz-utils packages
+      run: |
+        sudo apt-get install \
+          gcc-mingw-w64-x86-64 \
+          g++-mingw-w64-x86-64 \
+          libc6-dev patch xz-utils
+
+    - name: step 1 - compiling libraries
+      run: chmod 755 doit_1.sh && ./doit_1.sh
+
+    - name: step 2 - applying patch
+      run: chmod 755 doit_2.sh && ./doit_2.sh
+
+    - name: step 3 - compiling aria2c binaries
+      run: chmod 755 doit_3.sh && ./doit_3.sh
+
+    - name: compressing artifacts
+      run: |
+        sha256sum libraries_and_aria/* > sha256sums.txt
+        tar -cJf binaries.tar.xz binaries sha256sums.txt
+
+    - name: aria2c binaries upload
+      uses: actions/upload-artifact@v3.1.2
+      with:
+        path: binaries.tar.xz
