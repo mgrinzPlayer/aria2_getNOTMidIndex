@@ -1,0 +1,35 @@
+--- a/aria2-1.36.0/mingw-config
++++ b/aria2-1.36.0/mingw-config
+@@ -75,6 +75,8 @@
+     --without-libgcrypt \
+     --without-libnettle \
+     --with-cppunit-prefix=$PREFIX \
++    CFLAGS="-g0 -O2" \
++    CXXFLAGS="-g0 -O2" \
+     ARIA2_STATIC=yes \
+     CPPFLAGS="-I$PREFIX/include" \
+     LDFLAGS="-L$PREFIX/lib" \
+--- a/aria2-1.36.0/src/BitfieldMan.cc
++++ b/aria2-1.36.0/src/BitfieldMan.cc
+@@ -955,7 +955,9 @@
+
+ size_t BitfieldMan::Range::getMidIndex() const
+ {
+-  return (endIndex - startIndex) / 2 + startIndex;
++  if      ((endIndex - startIndex)>=20 ) return (endIndex - startIndex) * #MYPERCENT# / 100 + startIndex;
++  else if ((endIndex - startIndex)>=1  ) return endIndex-1;
++  else                                   return startIndex;
+ }
+
+ bool BitfieldMan::Range::operator<(const Range& range) const
+--- a/aria2-1.36.0/src/OptionHandlerFactory.cc
++++ b/aria2-1.36.0/src/OptionHandlerFactory.cc
+@@ -440,7 +440,7 @@
+   {
+     OptionHandler* op(new NumberOptionHandler(PREF_MAX_CONNECTION_PER_SERVER,
+                                               TEXT_MAX_CONNECTION_PER_SERVER,
+-                                              "1", 1, 16, 'x'));
++                                              "1", 1, 64, 'x'));
+     op->addTag(TAG_BASIC);
+     op->addTag(TAG_FTP);
+     op->addTag(TAG_HTTP);
