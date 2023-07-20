@@ -1,10 +1,11 @@
 #!/bin/sh
 export HOST=x86_64-w64-mingw32
 export PREFIX=$PWD/forARIA2/$HOST
+pracapraca=$(nproc 2> /dev/null || sysctl -n hw.ncpu)
 
 doit(){
 awk "{sub(/#MYPERCENT#/,$1); print}" src/BitfieldMan.mytemplate > src/BitfieldMan.cc
-make -j4
+make -j$pracapraca
 ${HOST}-strip src/aria2c.exe
 cp src/aria2c.exe ../binaries/aria2c-a$1.exe
 }
